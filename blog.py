@@ -1,3 +1,6 @@
+from post import Post
+
+
 class Blog:
     def __init__(self, title,  author):
         self.title = title
@@ -8,7 +11,7 @@ class Blog:
         return f"A {self.title} blog by {self.author} with {len(self.posts)} posts"
 
     def create_post(self, title, content):
-        self.posts.append({title: content})
+        self.posts.append(Post(title, content))
 
     def json(self):
         result_dict = {
@@ -17,5 +20,5 @@ class Blog:
             "posts number": len(self.posts)
         }
         for post in self.posts:
-            result_dict.update(post)
+            result_dict.update({post.title: post.content})
         return result_dict
