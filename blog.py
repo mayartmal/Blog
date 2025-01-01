@@ -5,10 +5,10 @@ class Blog:
         self.posts = []
 
     def __repr__(self):
-        pass
+        return f"A {self.title} blog by {self.author} with {len(self.posts)} posts"
 
     def create_post(self, title, content):
-        pass
+        self.posts.append({title: content})
 
     def json(self):
         pass
