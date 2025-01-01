@@ -11,4 +11,11 @@ class Blog:
         self.posts.append({title: content})
 
     def json(self):
-        pass
+        result_dict = {
+            "title": self.title,
+            "author": self.author,
+            "posts number": len(self.posts)
+        }
+        for post in self.posts:
+            result_dict.update(post)
+        return result_dict

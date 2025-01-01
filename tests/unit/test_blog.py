@@ -27,3 +27,17 @@ class TestBlog(TestCase):
         blog.create_post("Test Title 2", "Test Content 2")
         expected2 = f"A Test Blog blog by Test Author with 2 posts"
         self.assertEqual(blog.__repr__(), expected2)
+
+    def test_json(self):
+        blog = Blog("Test Blog", "Test Author")
+        blog.create_post("Test Title 1", "Test Content 1")
+        blog.create_post("Test Title 2", "Test Content 2")
+        expected = {
+            "title": "Test Blog",
+            "author": "Test Author",
+            "posts number": 2,
+            "Test Title 1": "Test Content 1",
+            "Test Title 2": "Test Content 2"
+        }
+        self.assertDictEqual(expected, blog.json())
+
