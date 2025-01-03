@@ -28,12 +28,22 @@ class TestBlog(TestCase):
     def test_json(self):
         blog = Blog("Test Blog", "Test Author")
         blog.create_post("Test Title 1", "Test Content 1")
-        blog.create_post("Test Title 2", "Test Content 2")
+
         expected = {
             "title": "Test Blog",
             "author": "Test Author",
-            "posts number": 2,
-            "Test Title 1": "Test Content 1",
-            "Test Title 2": "Test Content 2"
+            "posts number": 1,
+            "posts": [{"title": "Test Title 1",
+                       "content": "Test Content 1"}]
         }
         self.assertDictEqual(expected, blog.json())
+
+    def test_json_empty_blog(self):
+        blog = Blog("Test Blog", "Test Author")
+
+        expected = {
+            "title": "Test Blog",
+            "author": "Test Author",
+            "posts number": 0,
+            "posts": []
+        }

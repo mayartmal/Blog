@@ -17,8 +17,8 @@ class Blog:
         result_dict = {
             "title": self.title,
             "author": self.author,
-            "posts number": len(self.posts)
+            "posts number": len(self.posts),
+            "posts": [post.json() for post in self.posts]
+
         }
-        for post in self.posts:
-            result_dict.update({post.title: post.content})
         return result_dict
