@@ -7,6 +7,10 @@ from blog import Blog
 
 
 class TestApp(TestCase):
+    def setUp(self):
+        blog = Blog('Test Blog', 'Test Author')
+        app.blogs = {'Test': blog}
+
     def test_menu_calls_create_blog(self):
         with patch('builtins.input') as mocked_input:
             mocked_input.side_effect = ('c',
@@ -51,8 +55,6 @@ class TestApp(TestCase):
 
 
     def test_print_blogs(self):
-        blog = Blog('Test Blog', 'Test Author')
-        app.blogs = {'Test': blog}
         with patch('builtins.print') as mocked_print:
             app.print_blogs()
             mocked_print.assert_called_with('- A Test Blog blog by Test Author with 0 posts')
@@ -67,13 +69,11 @@ class TestApp(TestCase):
 
 
     def test_ask_read_blog(self):
-        blog = Blog('Test Blog', 'Test Author')
-        app.blogs = {'Test': blog}
         with patch('builtins.input', return_value='Test'):
             with patch('app.print_posts') as mocked_print_posts:
                 app.ask_read_blog()
 
-                mocked_print_posts.assert_called_with(blog)
+                mocked_print_posts.assert_called_with(app.blogs['Test'])
 
     def test_print_posts(self):
         blog = Blog('Test Blog', 'Test Author')
@@ -85,21 +85,18 @@ class TestApp(TestCase):
             mocked_print_post.assert_called_with(blog.posts[0])
 
     def test_print_post(self):
-        blog = Blog('Test Blog', 'Test Author')
-        blog.create_post("Test Post", "Test Content")
-        app.blogs = {'Test': blog}
+        app.blogs['Test'].create_post("Test Post", "Test Content")
 
         with patch('builtins.print') as mocked_print:
-            app.print_post(blog.posts[0])
+            app.print_post(app.blogs['Test'].posts[0])
             mocked_print.assert_called_with(app.POST_TEMPLATE.format("Test Post", "Test Content"))
 
     def test_ask_create_post(self):
-        blog = Blog('Test Blog', 'Test Author')
-        app.blogs = {'Test Blog': blog}
+
         with patch('builtins.input') as mocked_input:
-            mocked_input.side_effect = ('Test Blog',
+            mocked_input.side_effect = ('Test',
                                         'Test Post',
                                         'Test Content')
             app.ask_create_post()
-            self.assertEqual(blog.posts[0].title, 'Test Post')
-            self.assertEqual(blog.posts[0].content, 'Test Content')
+            self.assertEqual(app.blogs['Test'].posts[0].title, 'Test Post')
+            self.assertEqual(app.blogs['Test'].posts[0].content, 'Test Content')
